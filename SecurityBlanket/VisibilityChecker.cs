@@ -51,7 +51,7 @@ namespace SecurityBlanket
             var success = true;
             switch (item)
             {
-                // Value types are considered nonsensitive
+                // Value types are considered nonsensitive since there's no way to check them.
                 case string _:
                 case null:
                 case bool _:
