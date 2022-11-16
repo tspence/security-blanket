@@ -5,11 +5,14 @@ VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityBlanket", "SecurityBlanket\SecurityBlanket.csproj", "{C64D997D-8D7D-4CBA-9D0E-21E48C09FE57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityBlanket.Tests", "SecurityBlanket.Tests\SecurityBlanket.Tests.csproj", "{8E0915E1-14A2-4A0C-9256-AC3E3405B716}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityBlanket.Tests", "SecurityBlanket.Tests\SecurityBlanket.Tests.csproj", "{8E0915E1-14A2-4A0C-9256-AC3E3405B716}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{63B5A732-EBD0-4A4D-A7FF-C839853C4193}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		PATCHNOTES.md = PATCHNOTES.md
 		README.md = README.md
+		security-blanket.nuspec = security-blanket.nuspec
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleApi", "ExampleApi\ExampleApi.csproj", "{53089C3B-F111-4C0A-9F7D-84AFF5F07C45}"

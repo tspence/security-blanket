@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>SecurityBlanket</id>
+		<version>1.0.0</version>
+		<title>SecurityBlanket</title>
+		<authors>Ted Spence</authors>
+		<owners>Ted Spence</owners>
+		<license type="file">docs/LICENSE</license>
+		<projectUrl>https://github.com/tspence/security-blanket</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<readme>docs/README.md</readme>
+		<description>
+			Add an extra layer of security to your DotNet API projects.  SecurityBlanket will perform an independent
+      test, separate from your existing security code, to make sure that each data object in an API response
+      is permitted to be seen by the current caller.
+		</description>
+		<summary>Middleware for DotNet API services that provides a security layer against accidental data breaches.</summary>
+		<icon>docs/icons8-blankie.png</icon>
+		<releaseNotes>
+			# 1.0.0
+			November 16, 2022
+			
+			Initial release with extremely basic functionality.  
+		</releaseNotes>
+		<copyright>Copyright 2022</copyright>
+    	<tags>API security layer defense in depth data leak protection</tags>
+		<repository type="git" url="https://github.com/tspence/security-blanket" />
+		<dependencies>
+			<group targetFramework=".NETStandard2.0"/>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src=".\LICENSE" target="docs/LICENSE"/>
+		<file src=".\README.md" target="docs/README.md"/>
+		<file src=".\icons8-blankie.png" target="docs/icons8-blankie.png"/>
+		<file src=".\PATCHNOTES.md" target="docs/PatchNotes.md"/>
+		<file src="src\SecurityBlanket\bin\Release\netstandard2.0\*" target="lib\netstandard20" />
+	</files>
+</package>
