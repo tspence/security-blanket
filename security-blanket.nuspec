@@ -16,7 +16,7 @@
       is permitted to be seen by the current caller.
 		</description>
 		<summary>Middleware for DotNet API services that provides a security layer against accidental data breaches.</summary>
-		<icon>docs/icons8-blankie.png</icon>
+		<icon>docs/icons8-blankie-80.png</icon>
 		<releaseNotes>
 			# 1.0.0
 			November 16, 2022
@@ -33,8 +33,8 @@
 	<files>
 		<file src=".\LICENSE" target="docs/LICENSE"/>
 		<file src=".\README.md" target="docs/README.md"/>
-		<file src=".\icons8-blankie.png" target="docs/icons8-blankie.png"/>
+		<file src=".\icons8-blankie-80.png" target="docs/icons8-blankie-80.png"/>
 		<file src=".\PATCHNOTES.md" target="docs/PatchNotes.md"/>
-		<file src="src\SecurityBlanket\bin\Release\netstandard2.0\*" target="lib\netstandard20" />
+		<file src=".\SecurityBlanket\bin\Release\netstandard2.0\*" target="lib\netstandard20" />
 	</files>
 </package>
