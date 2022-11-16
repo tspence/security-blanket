@@ -12,11 +12,7 @@ namespace WebApiExperiment
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
-            //builder.Services.AddScoped<SecurityBlanketActionFilter>();
+            // Add the Security Blanket middleware to all API responses
             builder.Services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<SecurityBlanketActionFilter>();
