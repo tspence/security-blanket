@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SecurityBlanket.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,22 +16,26 @@ namespace SecurityBlanket.Tests
     {
     }
 
-    public class VisibilityObject : IVisibleResult
+    public class VisibilityObject : ICustomSecurity
     {
         private bool _allowed;
         public VisibilityObject(bool allowed) { _allowed = allowed; }
-        bool IVisibleResult.IsVisible(HttpContext context)
+        bool ICustomSecurity.IsVisible(HttpContext context)
         {
             return _allowed;
         }
     }
-    public class AsyncVisibilityObject : IVisibleAsyncResult
+    public class AsyncVisibilityObject : IAsyncCustomSecurity
     {
         private bool _allowed;
         public AsyncVisibilityObject(bool allowed) { _allowed = allowed; }
-        Task<bool> IVisibleAsyncResult.IsVisibleAsync(HttpContext context)
+        Task<bool> IAsyncCustomSecurity.IsVisibleAsync(HttpContext context)
         {
             return Task.FromResult(_allowed);
         }
+    }
+    public class NoSecurityObject : INoSecurity
+    {
+
     }
 }

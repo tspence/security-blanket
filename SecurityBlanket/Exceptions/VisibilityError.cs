@@ -10,12 +10,12 @@ namespace SecurityBlanket.Exceptions
         /// <summary>
         /// The object that should not have been seen
         /// </summary>
-        public object SensitiveData { get; set; }
+        public BlanketError[] Errors { get; set; }
         public HttpContext Context { get; set; }
 
-        public VisibilityError(object sensitiveData, HttpContext context)
+        public VisibilityError(BlanketError[] errors, HttpContext context)
         {
-            SensitiveData = sensitiveData;
+            Errors = errors;
             Context = context;
         }
     }

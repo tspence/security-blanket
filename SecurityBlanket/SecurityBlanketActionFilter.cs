@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SecurityBlanket.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace SecurityBlanket
 {
@@ -17,6 +18,13 @@ namespace SecurityBlanket
     /// </summary>
     public class SecurityBlanketActionFilter : IAsyncActionFilter
     {
+        private ILogger<SecurityBlanketActionFilter> _logger;
+
+        public SecurityBlanketActionFilter(ILogger<SecurityBlanketActionFilter> logger) 
+        {
+            this._logger = logger;
+        }
+
         /// <summary>
         /// Test a response and ensure that it passes security rules before returning it to the caller
         /// </summary>
@@ -31,12 +39,40 @@ namespace SecurityBlanket
             var resultContext = await next();
 
             // Test the result to make sure it passes security policies
-            await VisibilityChecker.ValidateIActionResult(resultContext.Result, context.HttpContext);
+            await ValidateIActionResult(resultContext.Result, context.HttpContext);
 
             // Flag the response so we know that visibility has been checked
             // You can examine this to make sure that security blanket is working as advertised
             context.HttpContext.Response.Headers.Add("Security", "SB");
         }
-
+        
+        /// <summary>
+        /// Inspect the async result object and throw an error if any data is not allowed to
+        /// be seen by the current HttpContext.  If any objects are about to be returned via
+        /// an API call that should not be seen, this method throws an exception to prevent
+        /// invalid data from being returned to a customer.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="context"></param>
+        /// <returns>void if successful; exceptions thrown on visibility problems</returns>
+        /// <exception cref="VisibilityError"></exception>
+        /// <exception cref="InsecureApiError"></exception>
+        public async Task ValidateIActionResult(IActionResult result, HttpContext context)
+        {
+            switch (result)
+            {
+                case ObjectResult obj: 
+                    var failures = await Validator.Validate(obj.Value, context);
+                    if (failures.Count > 0)
+                    {
+                        _logger.LogError("SecurityBlanket reported {count} security error(s) in the API {path}: {failures}", new object[] { failures.Count, context.Request.Path, failures });
+                        throw new VisibilityError(failures.ToArray(), context);
+                    }
+                    break;
+                default:
+                    _logger.LogError("SecurityBlanket detected that the API {path} returned something other than an ObjectResult", new object[] { context.Request.Path });
+                    throw new InsecureApiError(result, context);
+            }
+        }
     }
 }
