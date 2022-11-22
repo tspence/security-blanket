@@ -14,32 +14,6 @@ namespace SecurityBlanket
     public static class Validator
     {
 
-        /// <summary>
-        /// Inspect the async result object and throw an error if any data is not allowed to
-        /// be seen by the current HttpContext.  If any objects are about to be returned via
-        /// an API call that should not be seen, this method throws an exception to prevent
-        /// invalid data from being returned to a customer.
-        /// </summary>
-        /// <param name="result"></param>
-        /// <param name="context"></param>
-        /// <returns>void if successful; exceptions thrown on visibility problems</returns>
-        /// <exception cref="VisibilityError"></exception>
-        /// <exception cref="InsecureApiError"></exception>
-        public static async Task ValidateIActionResult(IActionResult result, HttpContext context)
-        {
-            switch (result)
-            {
-                case ObjectResult obj: 
-                    var failures = await Validate(obj.Value, context);
-                    if (failures.Count > 0)
-                    {
-                        throw new VisibilityError(failures.ToArray(), context);
-                    }
-                    break;
-                default:
-                    throw new InsecureApiError(result, context);
-            }
-        }
 
         /// <summary>
         /// Recursively examine an object and determine whether it is permitted to be seen
