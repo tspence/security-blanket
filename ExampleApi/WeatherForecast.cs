@@ -1,8 +1,8 @@
-using SecurityBlanket;
+using SecurityBlanket.Interfaces;
 
 namespace WebApiExperiment
 {
-    public class WeatherForecast : IVisibleResult
+    public class WeatherForecast : ICustomSecurity
     {
         public DateOnly Date { get; set; }
 

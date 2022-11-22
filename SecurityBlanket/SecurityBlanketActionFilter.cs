@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SecurityBlanket.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace SecurityBlanket
 {
@@ -17,6 +18,13 @@ namespace SecurityBlanket
     /// </summary>
     public class SecurityBlanketActionFilter : IAsyncActionFilter
     {
+        private ILogger<SecurityBlanketActionFilter> _logger;
+
+        public SecurityBlanketActionFilter(ILogger<SecurityBlanketActionFilter> logger) 
+        {
+            this._logger = logger;
+        }
+
         /// <summary>
         /// Test a response and ensure that it passes security rules before returning it to the caller
         /// </summary>
@@ -31,7 +39,7 @@ namespace SecurityBlanket
             var resultContext = await next();
 
             // Test the result to make sure it passes security policies
-            await VisibilityChecker.ValidateIActionResult(resultContext.Result, context.HttpContext);
+            await Validator.ValidateIActionResult(resultContext.Result, context.HttpContext);
 
             // Flag the response so we know that visibility has been checked
             // You can examine this to make sure that security blanket is working as advertised

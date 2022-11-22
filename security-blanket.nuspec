@@ -10,11 +10,7 @@
 		<projectUrl>https://github.com/tspence/security-blanket</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<readme>docs/README.md</readme>
-		<description>
-			Add an extra layer of security to your DotNet API projects.  SecurityBlanket will perform an independent
-      test, separate from your existing security code, to make sure that each data object in an API response
-      is permitted to be seen by the current caller.
-		</description>
+		<description>Add an extra layer of security to your DotNet API projects.  SecurityBlanket will perform an independent test, separate from your existing security code, to make sure that each data object in an API response is permitted to be seen by the current caller.</description>
 		<summary>Middleware for DotNet API services that provides a security layer against accidental data breaches.</summary>
 		<icon>docs/icons8-blankie-80.png</icon>
 		<releaseNotes>
