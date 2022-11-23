@@ -8,6 +8,8 @@ using SecurityBlanket.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Net.Mime;
+using Newtonsoft.Json;
 
 namespace SecurityBlanket
 {
@@ -38,14 +40,14 @@ namespace SecurityBlanket
             // Execute the action
             var resultContext = await next();
 
-            // Test the result to make sure it passes security policies
-            await ValidateIActionResult(resultContext.Result, context.HttpContext);
+            // Validate or override the result
+            resultContext.Result = await ValidateIActionResult(resultContext.Result, context.HttpContext);
 
             // Flag the response so we know that visibility has been checked
             // You can examine this to make sure that security blanket is working as advertised
             context.HttpContext.Response.Headers.Add("Security", "SB");
         }
-        
+
         /// <summary>
         /// Inspect the async result object and throw an error if any data is not allowed to
         /// be seen by the current HttpContext.  If any objects are about to be returned via
@@ -55,9 +57,7 @@ namespace SecurityBlanket
         /// <param name="result"></param>
         /// <param name="context"></param>
         /// <returns>void if successful; exceptions thrown on visibility problems</returns>
-        /// <exception cref="VisibilityError"></exception>
-        /// <exception cref="InsecureApiError"></exception>
-        public async Task ValidateIActionResult(IActionResult result, HttpContext context)
+        public async Task<IActionResult> ValidateIActionResult(IActionResult result, HttpContext context)
         {
             switch (result)
             {
@@ -65,14 +65,26 @@ namespace SecurityBlanket
                     var failures = await Validator.Validate(obj.Value, context);
                     if (failures.Count > 0)
                     {
-                        _logger.LogError("SecurityBlanket reported {count} security error(s) in the API {path}: {failures}", new object[] { failures.Count, context.Request.Path, failures });
-                        throw new VisibilityError(failures.ToArray(), context);
+                        _logger.LogError("SecurityBlanket reported {count} security error(s) in the API {path}: {failures}", new object[] { failures.Count, context.Request.Path, JsonConvert.SerializeObject(failures) });
+
+                        // We could throw an error here, but instead we'll rewrite the response
+                        return MakeError(new VisibilityError(failures, context));
                     }
-                    break;
+                    return result;
                 default:
                     _logger.LogError("SecurityBlanket detected that the API {path} returned something other than an ObjectResult", new object[] { context.Request.Path });
-                    throw new InsecureApiError(result, context);
+                    return MakeError(new InsecureApiError(result, context));
             }
+        }
+
+        public ContentResult MakeError(object error)
+        {
+            return new ContentResult
+            {
+                Content = JsonConvert.SerializeObject(error),
+                ContentType = "text/plain",
+                StatusCode = 500,
+            };
         }
     }
 }

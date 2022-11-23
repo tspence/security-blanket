@@ -1,22 +1,25 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace SecurityBlanket.Exceptions
 {
-    public class VisibilityError : Exception
+    /// <summary>
+    /// Represents what we share to an end user
+    /// </summary>
+    public class VisibilityError
     {
         /// <summary>
         /// The object that should not have been seen
         /// </summary>
-        public BlanketError[] Errors { get; set; }
-        public HttpContext Context { get; set; }
+        public int VisibilityErrors { get; set; }
+        public string Path { get; set; }
+        public string Message { get { return "This API generated an object visibility error."; } }
 
-        public VisibilityError(BlanketError[] errors, HttpContext context)
+        public VisibilityError(IEnumerable<BlanketError> errors, HttpContext context)
         {
-            Errors = errors;
-            Context = context;
+            VisibilityErrors = errors.Count();
+            Path = context.Request.Path;
         }
     }
 }
