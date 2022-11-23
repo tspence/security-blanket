@@ -35,7 +35,7 @@ namespace SecurityBlanket.Tests
             var finalResult = await filter.ValidateIActionResult(originalResult, context);
             Assert.AreNotEqual(originalResult, finalResult);
             var content = finalResult as ContentResult;
-            Assert.AreEqual("{\r\n  \"VisibilityErrors\": 1,\r\n  \"Path\": \"\",\r\n  \"Message\": \"This API generated an object visibility error.\"\r\n}", content?.Content);
+            Assert.IsTrue(content?.Content?.Contains("This API generated an object visibility error."));
 
             // Verify that we got a log error message
             mockLogger.VerifyLogging("SecurityBlanket reported 1 security error(s) in the API : [{\"Failure\":0,\"Value\":{},\"Path\":\"root\"}]", LogLevel.Error);
@@ -55,7 +55,7 @@ namespace SecurityBlanket.Tests
             var finalResult = await filter.ValidateIActionResult(originalResult, context);
             Assert.AreNotEqual(originalResult, finalResult);
             var content = finalResult as ContentResult;
-            Assert.AreEqual("{\r\n  \"VisibilityErrors\": 1,\r\n  \"Path\": \"\",\r\n  \"Message\": \"This API generated an object visibility error.\"\r\n}", content?.Content);
+            Assert.IsTrue(content?.Content?.Contains("This API generated an object visibility error."));
 
             // Verify that we got a log error message
             mockLogger.VerifyLogging("SecurityBlanket reported 1 security error(s) in the API : [{\"Failure\":0,\"Value\":{},\"Path\":\"root\"}]", LogLevel.Error);

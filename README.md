@@ -1,5 +1,7 @@
 # A Security Blanket for your API
 
+![Nuget](https://img.shields.io/nuget/v/SecurityBlanket)
+
 When building an API, you have to always worry about data leaks: is it possible for
 a customer to accidentally view data for another customer?  Does your API expose
 some information they shouldn't be permitted to see?
@@ -36,15 +38,22 @@ This interface allows the object to determine whether or not it is permitted to 
 by the current `HttpContext`.  This independent check will help you ensure that all
 database queries produce data the user is entitled to view.
 
+Here's one way you could implement security on your objects:
+
 ```csharp
-public class MyApiResultObject : IVisibleResult {
+public class MyApiResultObject : ICustomSecurity {
     public int AccountId { get; set; }
     bool IsVisible(HttpContext context)
     {
-        return this.AccountId == context.Session.GetInt32("accountId");
+        return this.AccountId == (int?)context.Items["accountId"];
     }
 }
 ```
+
+If you have nested objects, you'll want to implement `ICompoundSecurity`.  For data
+that isn't considered private, tag them with `INoSecurity`.  You can easily audit
+all your objects to ensure that each of them has a valid security policy that can be
+tested against the API caller's HTTPContext.
 
 ## Step 3 - Monitor your logs for security exceptions
 
