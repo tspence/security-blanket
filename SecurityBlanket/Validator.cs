@@ -1,20 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SecurityBlanket.Exceptions;
 using SecurityBlanket.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SecurityBlanket
 {
     public static class Validator
     {
-
-
         /// <summary>
         /// Recursively examine an object and determine whether it is permitted to be seen
         /// </summary>

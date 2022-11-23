@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SecurityBlanket.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SecurityBlanket.Tests
 {
@@ -12,7 +7,7 @@ namespace SecurityBlanket.Tests
     /// <summary>
     /// An object without the proper interface
     /// </summary>
-    public class InsecureObject
+    public class ObjectWithNoSecurityPolicy
     {
     }
 
