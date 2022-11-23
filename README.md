@@ -34,7 +34,7 @@ var app = builder.Build();
 
 ## Step 2 - Give your API response objects security rules
 
-Add the `IVisibleResult` or `IVisibleAsyncResult` interface to your API response classes.
+Add the `ICustomSecurity` interface to your API response classes.
 This interface allows the object to determine whether or not it is permitted to be seen
 by the current `HttpContext`.  This independent check will help you ensure that all
 database queries produce data the user is entitled to view.
