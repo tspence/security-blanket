@@ -36,13 +36,15 @@ namespace SecurityBlanket.Tests
             var mockLogger = new Mock<ILogger<SecurityBlanketActionFilter>>();
             var filter = new SecurityBlanketActionFilter(mockLogger.Object);
 
-            // Test a basic data object
+            // This object will fail
+            //mockLogger.Setup(logger => logger.LogError(It.IsAny<string>(), It.IsAny<object[]>()));
             var originalResult = new ObjectResult(new InsecureObject());
             var finalResult = await filter.ValidateIActionResult(originalResult, context);
             Assert.AreNotEqual(originalResult, finalResult);
 
             // Verify that we got a log error message
-            mockLogger.Verify(v => v.LogError(It.IsAny<string>(), It.IsAny<object[]>()));
+            mockLogger.VerifyLogging("SecurityBlanket reported 1 security error(s) in the API : [{\"Failure\":0,\"Value\":{},\"Path\":\"root\"}]", LogLevel.Error);
+            mockLogger.VerifyNoOtherCalls();
         }
     }
 }
