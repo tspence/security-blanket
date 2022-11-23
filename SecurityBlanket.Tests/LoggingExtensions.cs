@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SecurityBlanket.Tests
 {
@@ -17,7 +12,7 @@ namespace SecurityBlanket.Tests
         {
             times ??= Times.Once();
 
-            Func<object, Type, bool> state = (v, t) => v.ToString().CompareTo(expectedMessage) == 0;
+            Func<object, Type, bool> state = (v, t) => expectedMessage.CompareTo(v.ToString()) == 0;
 
             logger.Verify(
                 x => x.Log(

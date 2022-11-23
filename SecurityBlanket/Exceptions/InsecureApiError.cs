@@ -1,25 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SecurityBlanket.Exceptions
 {
     /// <summary>
     /// This error is thrown when an API returns an object that does not implement IVisibleResult or IVisibleAsyncResult
     /// </summary>
-    public class InsecureApiError : Exception
+    public class InsecureApiError
     {
-        /// <summary>
-        /// The object that does not correctly implement IVisibleResult or IVisibleAsyncResult
-        /// </summary>
-        public object NonsecuredData { get; set; }
-        public HttpContext Context { get; set; }
+        public string Path { get; set; }
 
-        public InsecureApiError(object nonsecuredData, HttpContext context)
+        public InsecureApiError(HttpContext context)
         {
-            NonsecuredData = nonsecuredData;
-            Context = context;
+            Path = context.Request.Path;
         }
     }
 }

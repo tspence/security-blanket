@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SecurityBlanket.Tests
@@ -8,7 +7,7 @@ namespace SecurityBlanket.Tests
     {
         private VisibilityObject _visible = new VisibilityObject(true);
         private VisibilityObject _nonvisible = new VisibilityObject(false);
-        private InsecureObject _insecure = new InsecureObject();
+        private ObjectWithNoSecurityPolicy _insecure = new ObjectWithNoSecurityPolicy();
         private NoSecurityObject _nosecurity = new NoSecurityObject();
 
         [TestMethod]
@@ -54,7 +53,7 @@ namespace SecurityBlanket.Tests
             Assert.AreEqual("root[3]", results[0].Path);
             Assert.AreEqual(FailureType.FailedPolicy, results[0].Failure);
 
-            var arrayWithRandomObjects = new object[] { new VisibilityObject(true), new InsecureObject() };
+            var arrayWithRandomObjects = new object[] { new VisibilityObject(true), new ObjectWithNoSecurityPolicy() };
             results = await Validator.Validate(arrayWithRandomObjects, null);
             Assert.AreEqual(1, results.Count);
             Assert.AreEqual("root[1]", results[0].Path);
@@ -92,11 +91,29 @@ namespace SecurityBlanket.Tests
 
             var genericDictionary = new Dictionary<string, object>();
             genericDictionary["key1"] = new VisibilityObject(true);
-            genericDictionary["key2"] = new InsecureObject();
+            genericDictionary["key2"] = new ObjectWithNoSecurityPolicy();
             results = await Validator.Validate(genericDictionary, null);
             Assert.AreEqual(1, results.Count);
             Assert.AreEqual("root[key2]", results[0].Path);
             Assert.AreEqual(FailureType.MissingPolicy, results[0].Failure);
+        }
+
+        [TestMethod]
+        public async Task CompoundVisibility()
+        {
+            // Test a compound object with all valid children
+            var compoundObject = new CompoundSecurityObject(true, new object[] { new VisibilityObject(true), new VisibilityObject(true) });
+            var results = await Validator.Validate(compoundObject, null);
+            Assert.AreEqual(0, results.Count);
+
+            // Test a compound object with one invalid child
+            var innerArray = new object[] { new VisibilityObject(true), new VisibilityObject(false) };
+            compoundObject = new CompoundSecurityObject(true, innerArray);
+            results = await Validator.Validate(compoundObject, null);
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual("root.Children[1]", results[0].Path);
+            Assert.AreEqual(FailureType.FailedPolicy, results[0].Failure);
+            Assert.AreEqual(innerArray[1], results[0].Value);
         }
     }
 }

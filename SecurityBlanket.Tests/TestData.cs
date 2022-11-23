@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SecurityBlanket.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SecurityBlanket.Tests
 {
@@ -12,7 +7,7 @@ namespace SecurityBlanket.Tests
     /// <summary>
     /// An object without the proper interface
     /// </summary>
-    public class InsecureObject
+    public class ObjectWithNoSecurityPolicy
     {
     }
 
@@ -37,5 +32,22 @@ namespace SecurityBlanket.Tests
     public class NoSecurityObject : INoSecurity
     {
 
+    }
+
+    public class CompoundSecurityObject : ICompoundSecurity, ICustomSecurity
+    {
+        private bool _allowed;
+        private object[] _children;
+        public CompoundSecurityObject(bool allowed, object[] children) { _allowed = allowed; _children = children; }
+
+        public IEnumerable<object> GetChildren()
+        {
+            return _children;
+        }
+
+        bool ICustomSecurity.IsVisible(HttpContext context)
+        {
+            return _allowed;
+        }
     }
 }

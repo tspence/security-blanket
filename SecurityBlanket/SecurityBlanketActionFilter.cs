@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using SecurityBlanket;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using SecurityBlanket.Exceptions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using System.Net.Mime;
 using Newtonsoft.Json;
+using SecurityBlanket.Exceptions;
+using System.Threading.Tasks;
 
 namespace SecurityBlanket
 {
@@ -22,7 +17,7 @@ namespace SecurityBlanket
     {
         private ILogger<SecurityBlanketActionFilter> _logger;
 
-        public SecurityBlanketActionFilter(ILogger<SecurityBlanketActionFilter> logger) 
+        public SecurityBlanketActionFilter(ILogger<SecurityBlanketActionFilter> logger)
         {
             this._logger = logger;
         }
@@ -61,7 +56,7 @@ namespace SecurityBlanket
         {
             switch (result)
             {
-                case ObjectResult obj: 
+                case ObjectResult obj:
                     var failures = await Validator.Validate(obj.Value, context);
                     if (failures.Count > 0)
                     {
@@ -73,7 +68,7 @@ namespace SecurityBlanket
                     return result;
                 default:
                     _logger.LogError("SecurityBlanket detected that the API {path} returned something other than an ObjectResult", new object[] { context.Request.Path });
-                    return MakeError(new InsecureApiError(result, context));
+                    return MakeError(new InsecureApiError(context));
             }
         }
 
@@ -81,7 +76,7 @@ namespace SecurityBlanket
         {
             return new ContentResult
             {
-                Content = JsonConvert.SerializeObject(error),
+                Content = JsonConvert.SerializeObject(error, Formatting.Indented),
                 ContentType = "text/plain",
                 StatusCode = 500,
             };

@@ -1,7 +1,6 @@
 using ExampleApi.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
+using Microsoft.Identity.Client;
 
 namespace WebApiExperiment.Controllers
 {
@@ -25,6 +24,50 @@ namespace WebApiExperiment.Controllers
         public IEnumerable<PublicDataModel> GetPublicData()
         {
             return new PublicDataModel[] { new PublicDataModel() };
+        }
+
+        /// <summary>
+        /// This API returns an object that lacks a SecurityBlanket policy.
+        /// Since that kind of object can't be tested for privacy, SecurityBlanket
+        /// fails and reports a different error.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("DataWithNoPolicy")]
+        public IEnumerable<ObjectWithNoPolicy> GetDataWithNoPolicy()
+        {
+            return new ObjectWithNoPolicy[] { new ObjectWithNoPolicy() };
+        }
+
+        /// <summary>
+        /// This API returns an object that lacks a SecurityBlanket policy.
+        /// Since that kind of object can't be tested for privacy, SecurityBlanket
+        /// fails and reports a different error.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("CompoundData")]
+        public CompoundDataModel GetCompoundData(int MyAccountId, int NumberOfChildItems, bool IncludeError)
+        {
+            // For simplicity sake, we will presume this is the account ID of the user
+            // contacting the API.  This is grossly oversimplified for the purpose of
+            // the demo.
+            HttpContext.Items.Add("AccountId", MyAccountId);
+
+            // Construct a compound object with multiple children
+            var model = new CompoundDataModel();
+            model.AccountId = MyAccountId;
+            for (int i = 0; i < NumberOfChildItems; i++)
+            {
+                model.Items.Add(new PrivateDataModel() { AccountId = MyAccountId }); 
+            }
+
+            // If the user wants to see an error, add one. Get it?
+            if (IncludeError)
+            {
+                model.Items.Add(new PrivateDataModel() { AccountId = MyAccountId + 1});
+            }
+
+            // Here's your result!  Let's let SecurityBlanket test it.
+            return model;
         }
 
         /// <summary>

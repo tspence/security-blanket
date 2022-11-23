@@ -1,20 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SecurityBlanket.Exceptions;
 using SecurityBlanket.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SecurityBlanket
 {
     public static class Validator
     {
-
-
         /// <summary>
         /// Recursively examine an object and determine whether it is permitted to be seen
         /// </summary>
@@ -59,13 +53,13 @@ namespace SecurityBlanket
                     case IAsyncCustomSecurity visibleAsync:
                         if (!await visibleAsync.IsVisibleAsync(context))
                         {
-                            results.Add(new BlanketError() { Failure = FailureType.FailedPolicy, Value = item, Path = current.Item1 });
+                            results.Add(new BlanketError() { Failure = FailureType.FailedPolicy, Value = current.Item2, Path = current.Item1 });
                         }
                         break;
                     case ICustomSecurity visibleResult:
                         if (!visibleResult.IsVisible(context))
                         {
-                            results.Add(new BlanketError() { Failure = FailureType.FailedPolicy, Value = item, Path = current.Item1 });
+                            results.Add(new BlanketError() { Failure = FailureType.FailedPolicy, Value = current.Item2, Path = current.Item1 });
                         }
                         break;
                     case IDictionary dict:
@@ -86,7 +80,7 @@ namespace SecurityBlanket
                         break;
 
                     default:
-                        results.Add(new BlanketError() { Failure = FailureType.MissingPolicy, Value = item, Path = current.Item1 });
+                        results.Add(new BlanketError() { Failure = FailureType.MissingPolicy, Value = current.Item2, Path = current.Item1 });
                         break;
                 }
 
@@ -97,6 +91,7 @@ namespace SecurityBlanket
                     foreach (var childItem in compound.GetChildren())
                     {
                         queue.Push(new Tuple<string, object>($"{current.Item1}.Children[{i}]", childItem));
+                        i = i + 1;
                     }
                 }
             }

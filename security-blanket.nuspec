@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>SecurityBlanket</id>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 		<title>SecurityBlanket</title>
 		<authors>Ted Spence</authors>
 		<owners>Ted Spence</owners>
@@ -14,16 +14,26 @@
 		<summary>Middleware for DotNet API services that provides a security layer against accidental data breaches.</summary>
 		<icon>docs/icons8-blankie-80.png</icon>
 		<releaseNotes>
-			# 1.0.0
-			November 16, 2022
-			
-			Initial release with extremely basic functionality.  
-		</releaseNotes>
+      # 1.1.0
+      November 23, 2022
+
+      Refined the program and improved documentation and usability.
+
+      * Added simple security policy for public data (i.e. data with no restrictions on visibility)
+      * Added compound security policy that can demonstrate multiple objects nested which also require validation
+      * Refined the ActionFilter to hide details of the exception and return a simplified JSON response
+      * Added logging using the standard ILogger interface
+      * Added tests for ActionFilter behavior
+      * Updated the demo app to demonstate these scenarios
+    </releaseNotes>
 		<copyright>Copyright 2022</copyright>
     	<tags>API security layer defense in depth data leak protection</tags>
 		<repository type="git" url="https://github.com/tspence/security-blanket" />
 		<dependencies>
-			<group targetFramework=".NETStandard2.0"/>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Microsoft.AspNetCore.Mvc.Abstractions" version="[2.2.0]" />
+        <dependency id="Microsoft.AspNetCore.Mvc.Core" version="[2.2.5]" />
+      </group>
 		</dependencies>
 	</metadata>
 	<files>
