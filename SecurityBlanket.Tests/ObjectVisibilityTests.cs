@@ -97,5 +97,23 @@ namespace SecurityBlanket.Tests
             Assert.AreEqual("root[key2]", results[0].Path);
             Assert.AreEqual(FailureType.MissingPolicy, results[0].Failure);
         }
+
+        [TestMethod]
+        public async Task CompoundVisibility()
+        {
+            // Test a compound object with all valid children
+            var compoundObject = new CompoundSecurityObject(true, new object[] { new VisibilityObject(true), new VisibilityObject(true) });
+            var results = await Validator.Validate(compoundObject, null);
+            Assert.AreEqual(0, results.Count);
+
+            // Test a compound object with one invalid child
+            var innerArray = new object[] { new VisibilityObject(true), new VisibilityObject(false) };
+            compoundObject = new CompoundSecurityObject(true, innerArray);
+            results = await Validator.Validate(compoundObject, null);
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual("root.Children[1]", results[0].Path);
+            Assert.AreEqual(FailureType.FailedPolicy, results[0].Failure);
+            Assert.AreEqual(innerArray[1], results[0].Value);
+        }
     }
 }

@@ -33,4 +33,21 @@ namespace SecurityBlanket.Tests
     {
 
     }
+
+    public class CompoundSecurityObject : ICompoundSecurity, ICustomSecurity
+    {
+        private bool _allowed;
+        private object[] _children;
+        public CompoundSecurityObject(bool allowed, object[] children) { _allowed = allowed; _children = children; }
+
+        public IEnumerable<object> GetChildren()
+        {
+            return _children;
+        }
+
+        bool ICustomSecurity.IsVisible(HttpContext context)
+        {
+            return _allowed;
+        }
+    }
 }
