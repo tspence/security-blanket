@@ -56,7 +56,7 @@ namespace SecurityBlanket
         /// </summary>
         /// <param name="result"></param>
         /// <param name="context"></param>
-        /// <returns>void if successful; exceptions thrown on visibility problems</returns>
+        /// <returns>If no validation errors occurred, returns the original result; otherwise returns an error message result</returns>
         public async Task<IActionResult> ValidateIActionResult(IActionResult result, HttpContext context)
         {
             switch (result)
