@@ -61,3 +61,11 @@ tested against the API caller's HTTPContext.
 If one of your APIs attempts to show an object to a user who isn't entitled to see it,
 you will get an exception.  Track these exceptions and make sure that you track down
 all the sources of object visibility errors.
+
+## Step 4 - Use SecurityBlanket for custom validation
+
+You can use the validator in your code outside of the API action filter as well:
+
+```csharp
+var failures = await Validator.Validate(objectToValidate, context);
+```
