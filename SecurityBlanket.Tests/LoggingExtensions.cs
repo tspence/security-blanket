@@ -12,7 +12,7 @@ namespace SecurityBlanket.Tests
         {
             times ??= Times.Once();
 
-            Func<object, Type, bool> state = (v, t) => v.ToString().CompareTo(expectedMessage) == 0;
+            Func<object, Type, bool> state = (v, t) => expectedMessage.CompareTo(v.ToString()) == 0;
 
             logger.Verify(
                 x => x.Log(

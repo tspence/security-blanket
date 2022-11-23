@@ -30,9 +30,10 @@
     	<tags>API security layer defense in depth data leak protection</tags>
 		<repository type="git" url="https://github.com/tspence/security-blanket" />
 		<dependencies>
-			<group targetFramework=".NETStandard2.0"/>
-      <dependency id="Microsoft.AspNetCore.Mvc.Abstractions" version="[2.2.0]" />
-      <dependency id="Microsoft.AspNetCore.Mvc.Core" version="[2.2.5]" />
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Microsoft.AspNetCore.Mvc.Abstractions" version="[2.2.0]" />
+        <dependency id="Microsoft.AspNetCore.Mvc.Core" version="[2.2.5]" />
+      </group>
 		</dependencies>
 	</metadata>
 	<files>
