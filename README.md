@@ -1,7 +1,7 @@
 # A Security Blanket for your API
 
 ![Nuget](https://img.shields.io/nuget/v/SecurityBlanket)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/tspence/security-blanket/build-and-test)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/tspence/security-blanket/dotnet.yml?branch=main)](https://github.com/tspence/security-blanket/actions/workflows/dotnet.yml)
 
 When building an API, you have to always worry about data leaks: is it possible for
 a customer to accidentally view data for another customer?  Does your API expose
