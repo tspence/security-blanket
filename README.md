@@ -2,6 +2,9 @@
 
 ![Nuget](https://img.shields.io/nuget/v/SecurityBlanket)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/tspence/security-blanket/dotnet.yml?branch=main)](https://github.com/tspence/security-blanket/actions/workflows/dotnet.yml)
+[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=tspence_security-blanket&metric=coverage)](https://sonarcloud.io/summary/overall?id=tspence_security-blanket)
+[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=tspence_security-blanket&metric=bugs)](https://sonarcloud.io/summary/overall?id=tspence_security-blanket)
+[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=tspence_security-blanket&metric=vulnerabilities)](https://sonarcloud.io/summary/overall?id=tspence_security-blanket)
 
 When building an API, you have to always worry about data leaks: is it possible for
 a customer to accidentally view data for another customer?  Does your API expose
