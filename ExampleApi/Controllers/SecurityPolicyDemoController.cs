@@ -67,6 +67,7 @@ namespace WebApiExperiment.Controllers
             }
 
             // Here's your result!  Let's let SecurityBlanket test it.
+            _logger.LogInformation("Reporting model for {AccountId}.", model.AccountId);
             return model;
         }
 
