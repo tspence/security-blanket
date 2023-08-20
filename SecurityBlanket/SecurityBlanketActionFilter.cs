@@ -15,11 +15,11 @@ namespace SecurityBlanket
     /// </summary>
     public class SecurityBlanketActionFilter : IAsyncActionFilter
     {
-        private ILogger<SecurityBlanketActionFilter> _logger;
+        private readonly ILogger<SecurityBlanketActionFilter> _logger;
 
         public SecurityBlanketActionFilter(ILogger<SecurityBlanketActionFilter> logger)
         {
-            this._logger = logger;
+            _logger = logger;
         }
 
         /// <summary>
@@ -60,14 +60,14 @@ namespace SecurityBlanket
                     var failures = await Validator.Validate(obj.Value, context);
                     if (failures.Count > 0)
                     {
-                        _logger.LogError("SecurityBlanket reported {count} security error(s) in the API {path}: {failures}", new object[] { failures.Count, context.Request.Path, JsonConvert.SerializeObject(failures) });
+                        _logger.LogError("SecurityBlanket reported {count} security error(s) in the API {path}: {failures}", failures.Count, context.Request.Path, JsonConvert.SerializeObject(failures));
 
                         // We could throw an error here, but instead we'll rewrite the response
                         return MakeError(new VisibilityError(failures, context));
                     }
                     return result;
                 default:
-                    _logger.LogError("SecurityBlanket detected that the API {path} returned something other than an ObjectResult", new object[] { context.Request.Path });
+                    _logger.LogError("SecurityBlanket detected that the API {path} returned something other than an ObjectResult", context.Request.Path);
                     return MakeError(new InsecureApiError(context));
             }
         }

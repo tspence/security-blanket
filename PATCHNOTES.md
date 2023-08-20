@@ -1,3 +1,8 @@
+# 1.1.1
+August 19, 2023
+
+* Added SonarCloud automated scanning and publishing to NuGet.
+
 # 1.1.0
 November 23, 2022
 
